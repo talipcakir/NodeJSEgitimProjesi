@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        /* Genel Stil Ayarları */
+        /* ... (CSS Kodları Aynı Kalacak) ... */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333; }
+        header { background: #333; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; }
+        header h1 { margin: 0; font-size: 1.5em; }
+        header nav a { color: #fff; text-decoration: none; margin-left: 15px; }
+        header nav a:hover { text-decoration: underline; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        #main-content { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        .btn { background-color: #5cb85c; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; display: inline-block; margin-right: 5px; }
+        .btn-danger { background-color: #d9534f; }
+        .btn:hover { opacity: 0.8; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input[type="text"], .form-group input[type="password"], .form-group input[type="number"], .form-group textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        .product-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 6px; overflow: hidden; }
+        .product-card img { float: left; margin-right: 15px; width: 100px; height: 100px; object-fit: cover; border-radius: 4px; }
+        
+        /* Toast Bildirim Stilleri */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: translateX(100%);
+            min-width: 250px;
+        }
+        .toast.success { background-color: #5cb85c; }
+        .toast.error { background-color: #d9534f; }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="/" style="color: white; text-decoration: none;">Node.js Projesi</a></h1>
+        <nav>
+            <a href="/admin/products">Admin Paneli</a>
+            <a href="/login">Giriş Yap</a>
+            <a href="#">Çıkış Yap (AJAX)</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <%- body %>
+    </div>
+    
+    <div id="toast-container"></div>
+
+    <script src="/js/layout.js"></script>
+</body>
+</html>

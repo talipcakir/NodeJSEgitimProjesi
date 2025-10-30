@@ -1,0 +1,82 @@
+<%- include('layout', { body: `
+    <div id="main-content">
+        <h2>Node.js Eğitim Projesi</h2>
+        
+        <form id="loginForm">
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" value="admin@proje.com" required> 
+            </div>
+
+            <div class="form-group">
+                <label for="password">Parola</label>
+                <input type="password" id="password" name="password" value="GucluSifre123" required>
+            </div>
+            
+            <button type="submit" class="btn">Giriş Yap</button>
+
+            <p style="margin-top: 15px;">
+                Henüz bir hesabınız yok mu? Lütfen Postman ile bir kullanıcı kaydedin.
+            </p>
+
+            <p id="message" style="color: blue; margin-top: 10px;"></p>
+        </form>
+
+    </div>
+
+    <script>
+        const form = document.getElementById('loginForm');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Varsayılan form gönderimini engelle
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            document.getElementById('serverError').textContent = ''; // Hata mesajını temizle
+
+            try {
+                // Asenkron olarak login API'sine istek gönder
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    message.textContent = result.message + " Yönlendiriliyor...";
+                    message.style.color = 'green';
+                    
+                    // Giriş başarılı. Sunucu JWT'yi Cookie olarak kaydetti.
+                    // Şimdi kullanıcıyı Admin Paneline yönlendir.
+                    window.location.href = '/admin/products'; 
+                } else {
+                    message.textContent = 'Giriş Başarısız: ' + result.message;
+                    message.style.color = 'red';
+                }
+
+            } catch (error) {
+                console.error("Login hatası:", error);
+                message.textContent = 'Sunucuya bağlanılamadı. Lütfen konsolu kontrol edin.';
+                message.style.color = 'red';
+            }
+        });
+
+        // Çıkış Yap butonu/linki için event listener
+        document.querySelector('header a[href="#"]').addEventListener('click', async (e) => {
+            if (e.target.textContent.includes('Çıkış Yap')) {
+                e.preventDefault();
+                // Logout API'sini çağır
+                await fetch('/api/auth/logout');
+                alert('Oturum başarıyla kapatıldı.');
+                // Login sayfasına yönlendir
+                window.location.href = '/login';
+            }
+        });
+    </script>
+` }) %>

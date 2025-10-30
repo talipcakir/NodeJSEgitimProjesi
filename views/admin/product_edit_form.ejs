@@ -1,0 +1,44 @@
+<%- include('../layout', { body: `
+    <div id="main-content">
+        <h2>${title} (ID: ${productId})</h2> 
+        <a href="/admin/products" class="btn">← Ürün Listesine Dön</a>
+        <hr>
+
+        <h3 id="form-title">Ürün Bilgileri Yükleniyor...</h3>
+        
+        <form id="editProductForm" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="name">Ürün Adı (*)</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Açıklama</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Fiyat (*) (TL)</label>
+                <input type="number" id="price" name="price" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="currentImage">Mevcut Resim</label>
+                <div id="currentImageContainer">
+                    <p>Resim yükleniyor...</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="productImage">Resmi Değiştir/Güncelle</label>
+                <input type="file" id="productImage" name="productImage" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Ürünü Güncelle</button>
+            <button type="button" class="btn btn-danger" onclick="deleteProductFromEditPage(${productId})">Bu Ürünü Sil</button>
+        </form>
+    </div>
+
+    <script src="/js/admin/product_edit_form.js"></script>
+` }) %>

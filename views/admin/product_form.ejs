@@ -1,0 +1,36 @@
+<%- include('../layout', { body: `
+    <div id="main-content">
+        <h2>${title}</h2>
+        <a href="/admin/products" class="btn">← Ürün Listesine Dön</a>
+        <hr>
+
+        <h3>Yeni Ürün Bilgileri</h3>
+        
+        <form id="productForm" enctype="multipart/form-data">
+            
+            <div class="form-group">
+                <label for="name">Ürün Adı (*)</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Açıklama</label>
+                <textarea id="description" name="description" rows="4"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Fiyat (*) (TL)</label>
+                <input type="number" id="price" name="price" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="productImage">Ürün Resmi</label>
+                <input type="file" id="productImage" name="productImage" accept="image/*">
+            </div>
+
+            <button type="submit" class="btn">Ürünü Ekle</button>
+        </form>
+    </div>
+
+    <script src="/js/admin/product_form.js"></script>
+` }) %>

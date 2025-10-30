@@ -1,0 +1,103 @@
+<%- include('../layout', { body: `
+    <div id="main-content">
+        <h2>${title}</h2>
+        <a href="/admin/products/add" class="btn">➕ Yeni Ürün Ekle</a>
+        <hr>
+
+        <h3>Ürün Listesi (AJAX / Async/Await ile çekildi)</h3>
+        
+        <div id="product-list-container">
+            <p id="loading-message">Ürünler yükleniyor...</p>
+        </div>
+    </div>
+
+    <script>
+        // Ürün listesini API'den asenkron olarak çeken fonksiyon
+        const fetchProducts = async () => {
+            const container = document.getElementById('product-list-container');
+            const loadingMessage = document.getElementById('loading-message');
+            
+            try {
+                // /api/products rotasına GET isteği gönder
+                const response = await fetch('/api/products'); 
+
+                if (!response.ok) {
+                    throw new Error(\`HTTP Hatası: \${response.status}\`);
+                }
+
+                const result = await response.json(); 
+                
+                if (loadingMessage) loadingMessage.remove();
+                
+                container.innerHTML = ''; // İçeriği temizle
+
+                if (result.count === 0) {
+                    container.innerHTML = '<p>Hiç ürün bulunamadı.</p>';
+                    showToast('Listede hiç ürün yok.', 'error');
+                    return;
+                }
+                
+                showToast(\`\${result.count} adet ürün başarıyla yüklendi.\`, 'success');
+
+                // Ürünleri DOM'a (sayfaya) dinamik olarak ekle
+                result.data.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    card.id = \`product-\${product.id}\`;
+
+                    // Resim yolu varsa tam yolu kullan, yoksa bir placeholder kullan.
+                    // Resim yolları sunucunun kök dizinine (public) göredir.
+                    const imageUrl = product.imageUrl ? product.imageUrl : '/images/placeholder.png'; // public/images/placeholder.png
+
+                    card.innerHTML = \`
+                        <img src="\${imageUrl}" alt="\${product.name}">
+                        <h4>\${product.name}</h4>
+                        <p>Fiyat: \${product.price} TL</p>
+                        <a href="/admin/products/edit/\${product.id}" class="btn">Düzenle</a>
+                        <button onclick="deleteProduct(\${product.id})" class="btn btn-danger">Sil</button>
+                        <div style="clear: both;"></div>
+                    \`;
+                    container.appendChild(card);
+                });
+
+            } catch (error) {
+                console.error("Ürünler çekilirken hata oluştu:", error);
+                if (loadingMessage) {
+                    loadingMessage.textContent = \`Hata: \${error.message}\`;
+                }
+                showToast('Ürün listesi yüklenirken bir hata oluştu.', 'error');
+            }
+        };
+
+        // Ürün silme fonksiyonu (Ajax DELETE isteği)
+        const deleteProduct = async (id) => {
+            if (!confirm(\`Ürün ID \${id} silinecek. Emin misiniz? (Admin yetkisi gerekir)\`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch(\`/api/products/\${id}\`, {
+                    method: 'DELETE',
+                    // JWT Cookie ile gönderileceği için Authorization Header gerekmez.
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast(\`Ürün ID \${id} başarıyla silindi.\`, 'success');
+                    // Silindikten sonra listeyi yenile
+                    fetchProducts(); 
+                } else {
+                    showToast(\`Silme Başarısız: \${result.message}\`, 'error');
+                }
+            } catch (error) {
+                console.error("Silme hatası:", error);
+                showToast('Sunucuya bağlanılamadı veya silme işlemi başarısız oldu.', 'error');
+            }
+        };
+
+        // Sayfa yüklendiğinde ürünleri çek
+        fetchProducts();
+
+    </script>
+` }) %>

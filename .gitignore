@@ -1,0 +1,12 @@
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+
+# Bağımlılıklar
+/node_modules
+
+# Gizli ortam değişkenleri
+.env
+
+# Log dosyaları
+*.log
