@@ -1,7 +1,6 @@
 // --------------------------------------------------
 // Dosya: server.js
 // Amaç: Ana sunucu dosyası. Express, Socket.io, Veritabanı ve Middleware'leri kurar.
-// GÜNCELLEME: Ürün Düzenleme (edit) sayfası rotası eklendi.
 // --------------------------------------------------
 
 const express = require('express');
