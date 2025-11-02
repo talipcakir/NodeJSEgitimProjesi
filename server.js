@@ -6,6 +6,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const db = require('./config/db');
+const cors = require('cors');
 const http = require('http'); 
 const { Server } = require("socket.io"); 
 const cookieParser = require('cookie-parser'); 
@@ -25,6 +26,11 @@ const { protect, authorize } = require('./middleware/authMiddleware');
 dotenv.config();
 
 const app = express();
+app.use(cors({
+  origin: '*', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // --- Socket.io Kurulumu ---
 const server = http.createServer(app); 
