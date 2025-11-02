@@ -22,6 +22,19 @@ const resolvers = {
         return [];
       }
     },
+    tests: async () => {
+      try {
+        // Tüm test verilerini veritabanından çekmek için MySQL sorgusu
+        const testData = [{ id: 1, name: "Test Veri 1" }, { id: 2, name: "Test Veri 2" }];
+        const rows = testData;
+        // Sorgu sonucunu döndürür, GraphQL bu veriyi otomatik olarak Test türüne eşler.
+        return rows;
+      } catch (error) {
+        console.error("GraphQL Test sorgusu hatası:", error);
+        // Hata durumunda boş dizi döndürerek uygulamanın çökmesini önler
+        return [];
+      }
+    },
     
     // product(id) sorgusu için çözümleyici fonksiyon
     // argümanlar (args) içinden 'id' değerini alır
@@ -37,6 +50,17 @@ const resolvers = {
         return null;
       }
     },
+    test: async (parent, args) => {
+      try {
+        const {id} = args;
+        const testDataAll = [{ id: 1, name: "Test Veri 1" }, { id: 2, name: "Test Veri 2" }];
+        const testData = testDataAll.find(t => t.id === id) || null;
+        return testData;
+      } catch (error) {
+        console.error(`GraphQL Test sorgusu hatası:`, error);
+        return null;
+      }
+    }
   },
 };
 
