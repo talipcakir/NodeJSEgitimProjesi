@@ -67,7 +67,10 @@ app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public')); 
 
-app.use(express.json()); 
+// Not: Apollo Server (GraphQL) kendi body-parser'ını kullanır.
+// express.json()'ı tüm uygulamaya uygularsak /graphql isteklerinde "stream is not readable"
+// hatası alınabilir. Bu yüzden JSON parser'ı yalnızca REST API'lar için etkinleştiriyoruz.
+app.use('/api', express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 app.use(cookieParser()); 
 
